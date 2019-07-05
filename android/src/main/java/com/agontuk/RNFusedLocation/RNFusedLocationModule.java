@@ -231,8 +231,11 @@ public class RNFusedLocationModule extends ReactContextBaseJavaModule {
             ? (long) options.getDouble("fastestInterval")
             : DEFAULT_INTERVAL;
         mShowLocationDialog = options.hasKey("showLocationDialog")
-            ? options.getBoolean("showLocationDialog")
-            : true;
+                ? options.getBoolean("showLocationDialog")
+                : true;
+        mForceRequestLocation = options.hasKey("forceRequestLocation")
+                ? options.getBoolean("forceRequestLocation")
+                : true;
 
         LocationSettingsRequest locationSettingsRequest = buildLocationSettingsRequest();
 
@@ -300,12 +303,14 @@ public class RNFusedLocationModule extends ReactContextBaseJavaModule {
                      * default location mode is not enough to perform the request.
                      */
                     if(!mShowLocationDialog) {
-                        invokeError(
-                            LocationError.SETTINGS_NOT_SATISFIED.getValue(),
-                            "Location settings are not satisfied.",
-                            isSingleUpdate
-                        );
+                        getUserLocation();
                         break;
+                        // invokeError(
+                        //     LocationError.SETTINGS_NOT_SATISFIED.getValue(),
+                        //     "Location settings are not satisfied.",
+                        //     isSingleUpdate
+                        // );
+                        // break;
                     }
 
                     try {
