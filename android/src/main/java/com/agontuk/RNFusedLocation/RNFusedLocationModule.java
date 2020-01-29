@@ -83,6 +83,17 @@ public class RNFusedLocationModule extends ReactContextBaseJavaModule {
                             true
                     );
                 }
+
+                if (!LocationUtils.isLocationEnabled(getContext())) {
+                    invokeError(
+                        LocationError.POSITION_UNAVAILABLE.getValue(),
+                        "No location provider available.",
+                        false
+                    );
+                    return;
+                }
+
+                getLocationUpdates();
             }
         }
     };
@@ -367,7 +378,13 @@ public class RNFusedLocationModule extends ReactContextBaseJavaModule {
             mFusedProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
                 @Override
                 public void onComplete(Task<Location> task) {
-                    Location location = task.getResult();
+                    Location location = null;
+
+                    try {
+                        location = task.getResult(ApiException.class);
+                    } catch (ApiException exception) {
+                        Log.w(TAG, "getLastLocation error: " + exception.getMessage());
+                    }
 
                     if (location != null &&
                             (SystemClock.currentTimeMillis() - location.getTime()) < mMaximumAge) {

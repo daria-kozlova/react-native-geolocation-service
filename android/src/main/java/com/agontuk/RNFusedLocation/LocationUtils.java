@@ -7,7 +7,7 @@ import android.Manifest;
 import android.os.Build;
 import android.text.TextUtils;
 import android.provider.Settings;
-import android.support.v4.app.ActivityCompat;
+import androidx.core.app.ActivityCompat;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
@@ -39,7 +39,6 @@ public class LocationUtils {
             }
 
             return locationMode != Settings.Secure.LOCATION_MODE_OFF;
-
         } else {
             locationProviders = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
             return !TextUtils.isEmpty(locationProviders);
@@ -50,7 +49,7 @@ public class LocationUtils {
      * Check if google play service is available on device.
      */
     public static boolean isGooglePlayServicesAvailable(Context context) {
-        int result =  GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context);
+        int result = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context);
 
         // TODO: Handle other possible success types.
         return result == ConnectionResult.SUCCESS || result == ConnectionResult.SERVICE_UPDATING;

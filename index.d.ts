@@ -4,7 +4,9 @@ declare module 'react-native-geolocation-service' {
     maximumAge?: number
     enableHighAccuracy?: boolean
     distanceFilter?: number
-    showLocationDialog?: boolean
+    useSignificantChanges?: boolean
+    showLocationDialog?: boolean,
+    forceRequestLocation?: boolean
   }
 
   interface GeoWatchOptions {
@@ -15,10 +17,11 @@ declare module 'react-native-geolocation-service' {
     useSignificantChanges?: boolean
     interval?: number
     fastestInterval?: number
-    showLocationDialog?: boolean
+    showLocationDialog?: boolean,
+    forceRequestLocation?: boolean
   }
-  
-  export enum GeoErrorCode {
+
+  export enum PositionError {
     PERMISSION_DENIED = 1,
     POSITION_UNAVAILABLE = 2,
     TIMEOUT = 3,
@@ -28,27 +31,29 @@ declare module 'react-native-geolocation-service' {
   }
 
   export interface GeoError {
-    code: GeoErrorCode
+    code: PositionError
     message: string
   }
 
   export interface GeoCoordinates {
-    latitude?: number
-    longitude?: number
-    accuracy?: number
-    altitude?: number
-    heading?: number
-    speed?: number
-    altitudeAccuracy?: number
+    latitude: number
+    longitude: number
+    accuracy: number
+    altitude: number | null
+    heading: number | null
+    speed: number | null
+    altitudeAccuracy: number | null
   }
 
   export interface GeoPosition {
     coords: GeoCoordinates
-    timestamp: Date
+    timestamp: number
+    mocked?: boolean;
   }
 
   export interface GeoConfig {
-    skipPermissionRequests?: boolean
+    skipPermissionRequests: boolean
+    authorizationLevel: 'always' | 'whenInUse' | 'auto'
   }
 
   export function setRNConfiguration(config: GeoConfig): void
