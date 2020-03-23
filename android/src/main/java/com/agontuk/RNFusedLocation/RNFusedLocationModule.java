@@ -378,14 +378,8 @@ public class RNFusedLocationModule extends ReactContextBaseJavaModule {
             mFusedProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
                 @Override
                 public void onComplete(Task<Location> task) {
-                    Location location = null;
-
-                    try {
-                        location = task.getResult(ApiException.class);
-                    } catch (ApiException exception) {
-                        Log.w(TAG, "getLastLocation error: " + exception.getMessage());
-                    }
-
+                    Location location = task.getResult();
+                    
                     if (location != null &&
                             (SystemClock.currentTimeMillis() - location.getTime()) < mMaximumAge) {
                         invokeSuccess(LocationUtils.locationToMap(location), true);
